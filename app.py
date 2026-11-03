@@ -44,12 +44,11 @@ async def predict_route(request: PredictRequest):
             raise HTTPException(status_code=400, detail="Text is required")
 
         obj = PredictionPipeline()
-        # Comment out th if block for smothly running
-        # if not obj.is_ready():
-        #     raise HTTPException(
-        #         status_code=503,
-        #         detail="Model is not available yet. Please run the training pipeline first."
-        #     )
+        if not obj.is_ready():
+            raise HTTPException(
+                status_code=503,
+                detail="Model is not available yet. Please run the training pipeline first."
+            )
 
         result = obj.predict(request.text)
         return {"summary": result}
