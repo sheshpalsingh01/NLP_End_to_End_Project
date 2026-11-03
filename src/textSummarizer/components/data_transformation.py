@@ -4,7 +4,7 @@ import zipfile
 from src.textSummarizer.logging import logger
 from src.textSummarizer.entity import DataTransformationConfig
 from src.textSummarizer.config.configuration import ConfigurationManager
-import os
+
 from src.textSummarizer.logging import logger
 from transformers import AutoTokenizer
 from datasets import load_from_disk
