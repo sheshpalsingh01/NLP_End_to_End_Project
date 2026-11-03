@@ -8,7 +8,7 @@ log_file_path = os.path.join(LOG_DIR,"running_logs.log")
 os.makedirs(LOG_DIR,exist_ok=True)
 
 logging.basicConfig(
-    # filename=log_file_path,
+
     level=logging.INFO,
     format=log_str,
     handlers=[logging.StreamHandler(sys.stdout),

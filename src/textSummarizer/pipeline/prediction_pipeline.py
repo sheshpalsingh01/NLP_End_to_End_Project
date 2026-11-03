@@ -1,15 +1,26 @@
 from src.textSummarizer.config.configuration import ConfigurationManager
 from transformers import AutoModelForSeq2SeqLM, AutoTokenizer
 import torch
+from pathlib import Path
 
 
 class PredictionPipeline:
     def __init__(self):
         self.config = ConfigurationManager().get_model_evaluation_config()
+        self.model_path = Path(self.config.model_path)
+        self.tokenizer_path = Path(self.config.tokenizer_path)
+
+    def is_ready(self) -> bool:
+        return self.model_path.exists() and self.tokenizer_path.exists()
 
     def predict(self, text: str):
-        tokenizer = AutoTokenizer.from_pretrained(self.config.tokenizer_path)
-        model = AutoModelForSeq2SeqLM.from_pretrained(self.config.model_path)
+        if not self.is_ready():
+            raise FileNotFoundError(
+                "Model artifacts are not available. Train the model pipeline first."
+            )
+
+        tokenizer = AutoTokenizer.from_pretrained(self.tokenizer_path)
+        model = AutoModelForSeq2SeqLM.from_pretrained(self.model_path)
 
         device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         model.to(device)

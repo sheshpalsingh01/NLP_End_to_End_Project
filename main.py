@@ -33,7 +33,7 @@ STAGE_NAME ="Model Trainer stage"
 try:
     logger.info("Starting model trainer ........")
     obj = ModelTrainerPipeline()
-    # obj.initiate_model_trainer()
+    obj.initiate_model_trainer()
     logger.info("Model Trainer completed .........")
 except Exception as e:
     logger.exception(e)
@@ -44,7 +44,7 @@ STAGE_NAME ="Model Evaluation stage"
 try:
     logger.info("Starting model evaluation ........")
     obj = ModelEvaluationPipeline()
-    # obj.initiate_model_evaluation()
+    obj.initiate_model_evaluation()
     logger.info("Model Evaluation completed .........")
 except Exception as e:
     logger.exception(e)
