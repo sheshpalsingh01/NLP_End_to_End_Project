@@ -1,8 +1,9 @@
 from fastapi import FastAPI, HTTPException
 import uvicorn
 import os
+from pathlib import Path
 from pydantic import BaseModel
-from fastapi.responses import RedirectResponse, Response
+from fastapi.responses import RedirectResponse, Response, FileResponse
 from src.textSummarizer.pipeline.prediction_pipeline import PredictionPipeline
 
 app = FastAPI()
@@ -15,6 +16,12 @@ class PredictRequest(BaseModel):
 @app.get("/", tags=["authentication"])
 async def index():
     return RedirectResponse(url="/docs")
+
+
+@app.get("/ui")
+async def ui():
+    html_path = Path(__file__).resolve().parent / "templates" / "index.html"
+    return FileResponse(html_path)
 
 
 @app.get("/train")
