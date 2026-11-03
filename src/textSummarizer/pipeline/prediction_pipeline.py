@@ -14,10 +14,10 @@ class PredictionPipeline:
         return self.model_path.exists() and self.tokenizer_path.exists()
 
     def predict(self, text: str):
-        if not self.is_ready():
-            raise FileNotFoundError(
-                "Model artifacts are not available. Train the model pipeline first."
-            )
+        # if not self.is_ready():
+        #     raise FileNotFoundError(
+        #         "Model artifacts are not available. Train the model pipeline first."
+        #     )
 
         tokenizer = AutoTokenizer.from_pretrained(self.tokenizer_path)
         model = AutoModelForSeq2SeqLM.from_pretrained(self.model_path)
