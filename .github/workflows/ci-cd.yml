@@ -4,11 +4,9 @@ on:
   push:
     branches:
       - main
-      - master
   pull_request:
     branches:
       - main
-      - master
 
 jobs:
   build-and-test:
@@ -28,29 +26,21 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Compile Python files
-        run: |
-          python -m compileall app.py src
-
-      - name: Smoke test app import
+      - name: Smoke test FastAPI app
         run: |
           python - <<'PY'
-          import app
-          print('FastAPI app imported successfully')
+          from fastapi.testclient import TestClient
+          from app import app
+
+          client = TestClient(app)
+
+          ui_response = client.get('/ui')
+          assert ui_response.status_code == 200, ui_response.text
+
+          predict_response = client.post('/predict', json={'text': 'hello world'})
+          assert predict_response.status_code == 200, predict_response.text
+          print(predict_response.json())
           PY
 
-  deploy:
-    needs: build-and-test
-    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
       - name: Build Docker image
-        run: |
-          docker build -t text-summarizer:${{ github.sha }} .
-
-      - name: Docker image build success
-        run: echo "Docker build completed successfully"
+        run: docker build -t text-summarizer:latest .

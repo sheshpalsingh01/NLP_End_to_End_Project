@@ -3,7 +3,7 @@ import uvicorn
 import os
 from pathlib import Path
 from pydantic import BaseModel
-from fastapi.responses import RedirectResponse, Response, FileResponse
+from fastapi.responses import HTMLResponse, RedirectResponse, Response
 from src.textSummarizer.pipeline.prediction_pipeline import PredictionPipeline
 
 app = FastAPI()
@@ -13,15 +13,19 @@ class PredictRequest(BaseModel):
     text: str
 
 
+def load_html_page() -> str:
+    file_path = Path(__file__).resolve().parent / "templates" / "index.html"
+    return file_path.read_text(encoding="utf-8")
+
+
 @app.get("/", tags=["authentication"])
 async def index():
-    return RedirectResponse(url="/docs")
+    return HTMLResponse(content=load_html_page())
 
 
-@app.get("/ui")
+@app.get("/ui", tags=["ui"])
 async def ui():
-    html_path = Path(__file__).resolve().parent / "templates" / "index.html"
-    return FileResponse(html_path)
+    return HTMLResponse(content=load_html_page())
 
 
 @app.get("/train")
