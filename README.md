@@ -259,7 +259,7 @@ curl -X POST "http://127.0.0.1:8000/predict" \
 
 ## 🌐 Deploy on Render
 
-This project is deployment-ready for Render using Docker.
+This project is deployment-ready for Render using Docker. also can deploy on the Dockerhub 
 
 ### Render deployment steps
 
